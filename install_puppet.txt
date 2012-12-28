@@ -1,0 +1,31 @@
+# untar puppet-enterprise-2.6.0-ubuntu-12.04-i386.tar
+# run puppet enterprise installer
+cd puppet-enterprise-2.6.0-ubuntu-12.04-amd64
+./puppet-enterprise-installer
+
+# edit /etc/puppetlabs/puppet/auth.conf
+# to add the following lines just before the final path /
+path /certificate_status
+method save
+auth any
+allow ec2-54-228-5-138.eu-west-1.compute.amazonaws.com,ip-10-33-167-181.eu-west-1.compute.internal
+
+# edit /opt/puppet/lib/site_ruby/1.8/puppet/cloudpack.rb
+# to add a sleep to avoid a race condition when signing the cert
+      # TODO: Wait for C.S.R.?
+      sleep(15)
+
+# add a user at the PE console which is used for authentication
+user=stefberg1@gmail.com
+passwd=secret_password
+
+# commands that might need to be run to
+sudo puppet cert clean ip-10-33-167-181.eu-west-1.compute.internal
+rm -f /home/ubuntu/.puppet/ssl/certs/ip-10-33-167-181.eu-west-1.compute.internal.pem
+sudo puppet agent --server ip-10-33-167-181.eu-west-1.compute.internal --waitforcert 60 --test --verbose
+
+# to regenerate the master cert
+sudo puppet master --no-daemonize --verbose
+
+
+
