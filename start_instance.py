@@ -7,8 +7,12 @@
 
 import boto
 import boto.ec2.connection
+import boto.manage.cmdshell
 import time
 import sys
+import getpass
+
+ssh_pass = getpass.getpass('ssh key password: ')
 
 ec2 = boto.ec2.connect_to_region('eu-west-1')
 
@@ -30,6 +34,16 @@ while instance.state != 'running':
 print ""
 
 print "started ", instance.id, " ", instance._state.name, " ", instance.public_dns_name
+
+wait_time = 60
+print "wait", wait_time, "before connecting with ssh..."
+time.sleep(wait_time)
+print 'connecting with ssh...'
+ssh_client = boto.manage.cmdshell.sshclient_from_instance(instance, '/home/saberg/.ssh/id_rsa',
+                                                          host_key_file='~/.ssh/known_hosts',
+                                                          user_name='ubuntu', ssh_pwd=ssh_pass)
+
+print ssh_client.run('arch')
 
 ec2.close()
 print "done\n"
