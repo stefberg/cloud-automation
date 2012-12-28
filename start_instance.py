@@ -7,14 +7,29 @@
 
 import boto
 import boto.ec2.connection
+import time
+import sys
 
 ec2 = boto.ec2.connect_to_region('eu-west-1')
-print "Starting...\n"
 
-ec2.run_instances('ami-c1aaabb5',
+print "Starting..."
+started = ec2.run_instances('ami-c1aaabb5',
                   key_name='vbox-ubuntu',
                   instance_type='t1.micro',
                   security_groups=['quick-start-1'])
-print "started\n"
+
+instance = started.instances[0]
+print "started ", instance.id, " ", instance._state.name, " ", instance.public_dns_name
+
+print "waiting for instance to start",
+while instance.state != 'running':
+    sys.stdout.write('.')
+    sys.stdout.flush()
+    time.sleep(1)
+    instance.update()
+print ""
+
+print "started ", instance.id, " ", instance._state.name, " ", instance.public_dns_name
+
 ec2.close()
 print "done\n"
