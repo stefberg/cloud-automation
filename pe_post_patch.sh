@@ -20,5 +20,7 @@ fi
 sed 's/# TODO: Wait for C.S.R.?/sleep(10)/' <$file.orig > $file
 diff $file.orig $file 
 
-
-
+auth_user=stefberg1@gmail.com
+auth_password=secret_password
+cd /opt/puppet/share/console-auth
+/opt/puppet/bin/rake db:create_user USERNAME="${auth_user}" PASSWORD="${auth_password}" ROLE="Admin"

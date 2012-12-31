@@ -101,7 +101,5 @@ ssh_client.put_file("fog", ".fog")
 
 run_cmd('ls -la')
 
-print "now add user stefberg1@gmail.com with password secret_password on the PE console https://"+instance.public_dns_name
-
 ec2.close()
-print "done\n"
+print "PE console https://"+instance.public_dns_name
