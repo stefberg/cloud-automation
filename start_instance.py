@@ -96,8 +96,9 @@ print "creating .fog file"
 f = open("fog", "w")
 f.write(":default:\n  :aws_access_key_id: " + aws_key + "\n  :aws_secret_access_key: " + aws_secret + "\n")
 f.close()
-
 ssh_client.put_file("fog", ".fog")
+print "install apache"
+run_cmd('sudo apt-get install apache2')
 
 run_cmd('ls -la')
 
