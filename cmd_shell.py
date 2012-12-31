@@ -19,6 +19,10 @@ class FakeInstance(object):
 
 
 ssh_pass = getpass.getpass('ssh key password: ')
+puppet_console_email = raw_input('puppet console email: ')
+puppet_console_pass = getpass.getpass('puppet console password: ')
+aws_key = raw_input('aws_access_key_id: ')
+aws_secret = raw_input('aws_secret_access_key: ')
 
 instance = FakeInstance(instance_id, dns_name)
 
@@ -35,11 +39,17 @@ def run_cmd(cmd):
 
 run_cmd('ls -la')
 
-res = ssh_client.put_file('bootstrap_node', 'bootstrap_node')
-if res:
-    print res
+print "running gen_answers.sh"
+run_cmd('sh ./gen_answers.sh ' + puppet_console_email + " " + puppet_console_pass + " > answers.txt")
+print "running puppet installation"
+run_cmd('cd puppet-enterprise-2.6.0-ubuntu-12.04-amd64; sudo ./puppet-enterprise-installer -a ../answers.txt')
+print "running pe_post_patch.sh"
+run_cmd('sudo pe_post_patch.sh')
+print "creating .fog file"
+f = open("fog", "w")
+f.write(":default:\n  :aws_access_key_id: " + aws_key + "\n  :aws_secret_access_key: " + aws_secret + "\n")
+f.close()
 
-run_cmd('ls -la')
+ssh_client.put_file("fog", ".fog")
 
-
-
+print "now add user stefberg1@gmail.com with password secret_password on the PE console"

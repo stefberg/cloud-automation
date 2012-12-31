@@ -1,6 +1,13 @@
 #!/bin/sh                                                                                                                  
 
 server=`hostname -f`
+group=$1
+if [ $group = "" ]
+then
+    echo usage: $0 '<group to add instance to>'
+    exit 1
+fi
+
 puppet node_aws bootstrap \
 --image ami-c1aaabb5 \
 --keyname 'puppet_provisioner' \
@@ -11,7 +18,7 @@ puppet node_aws bootstrap \
 --keyfile ~/.ssh/id_rsa \
 --certname puppet \
 --server $server \
---node-group=test_group \
+--node-group=$group \
 --enc-server=localhost \
 --enc-port=443 \
 --enc-ssl \
