@@ -91,8 +91,6 @@ print "running gen_answers.sh"
 run_cmd('sh ./gen_answers.sh ' + puppet_console_email + " " + puppet_console_pass + ' > answers.txt')
 print "running puppet installation"
 run_cmd('cd puppet-enterprise-2.6.0-ubuntu-12.04-amd64; sudo ./puppet-enterprise-installer -a ../answers.txt')
-print "running pe_post_patch.sh"
-run_cmd('sudo sh ./pe_post_patch.sh')
 print "creating .fog file"
 f = open("fog", "w")
 f.write(":default:\n  :aws_access_key_id: " + aws_key + "\n  :aws_secret_access_key: " + aws_secret + "\n")
@@ -100,6 +98,8 @@ f.close()
 ssh_client.put_file("fog", ".fog")
 print "install apache"
 run_cmd('sudo apt-get -y install apache2')
+print "running pe_post_patch.sh"
+run_cmd('sudo sh ./pe_post_patch.sh')
 
 run_cmd('ls -la')
 
