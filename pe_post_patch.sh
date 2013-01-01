@@ -29,4 +29,4 @@ cp provision.html /var/www/
 cp provision.py /usr/lib/cgi-bin
 chmod +x /usr/lib/cgi-bin/provision.py
 mkdir /var/www/logs
-chown go+w /var/www/logs
+chmod go+w /var/www/logs
