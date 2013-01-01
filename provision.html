@@ -1,0 +1,14 @@
+<html>
+  <body>
+    <form action="/cgi-bin/provision.py">
+      Group: <input size="10" type="text" name="group"/><br/>
+      VM size: 
+      <select name="vm_size">
+	<option value="t1.micro">micro</option>
+	<option value="m1.small">small</option>
+      </select><br/>
+      password: <input size="10" type="password" name="pass"/><br/>
+      <input type="submit" value="Provision"/>
+    </form>
+  </body>
+</html>

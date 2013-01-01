@@ -72,7 +72,7 @@ def run_cmd(cmd):
 
 run_cmd('ls -la')
 
-files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh']
+files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "id_rsa"]
 for f in files:
     print "uploading ", f
     res = ssh_client.put_file(f, f)
@@ -84,6 +84,7 @@ res = ssh_client.put_file("id_rsa", ".ssh/id_rsa")
 if res:
     print res
 
+run_cmd('chmod +x bootstrap_node')
 print "untar puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar"
 run_cmd('tar xf puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar')
 print "running gen_answers.sh"
@@ -98,7 +99,7 @@ f.write(":default:\n  :aws_access_key_id: " + aws_key + "\n  :aws_secret_access_
 f.close()
 ssh_client.put_file("fog", ".fog")
 print "install apache"
-run_cmd('sudo apt-get install apache2')
+run_cmd('sudo apt-get -y install apache2')
 
 run_cmd('ls -la')
 

@@ -2,11 +2,16 @@
 
 server=`hostname -f`
 group=$1
-if [ $group = "" ]
+if [ "$group" = "" ]
 then
     echo usage: $0 '<group to add instance to>'
     exit 1
 fi
+
+HOME=/home/ubuntu
+export HOME
+USER=ubuntu
+export USER
 
 puppet node_aws bootstrap \
 --image ami-c1aaabb5 \
@@ -15,7 +20,7 @@ puppet node_aws bootstrap \
 --region eu-west-1 \
 --security-group quick-start-1 \
 --login ubuntu \
---keyfile ~/.ssh/id_rsa \
+--keyfile /home/ubuntu/id_rsa \
 --certname puppet \
 --server $server \
 --node-group=$group \
