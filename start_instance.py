@@ -72,7 +72,7 @@ def run_cmd(cmd):
 
 run_cmd('ls -la')
 
-files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "id_rsa"]
+files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "id_rsa", "provision.html", "provision.py"]
 for f in files:
     print "uploading ", f
     res = ssh_client.put_file(f, f)
