@@ -28,4 +28,6 @@ sudo puppet agent --server ip-10-33-167-181.eu-west-1.compute.internal --waitfor
 sudo puppet master --no-daemonize --verbose
 
 
-
+cd .puppet/modules
+git clone https://github.com/puppetlabs/puppetlabs-dashboard.git
+./create_group test_from_cli

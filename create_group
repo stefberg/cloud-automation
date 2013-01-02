@@ -1,0 +1,34 @@
+#!/bin/sh
+
+#  --mode MODE                    - The run mode to use (user, agent, or master).
+#  --render-as FORMAT             - The rendering format to use.
+#  --verbose                      - Whether to log verbosely.
+#  --debug                        - Whether to log debug information.
+#  --classes=                     - List of classes to be added to the group
+#  --enc-auth-passwd=             - Password for authentication to ENC
+#  --enc-auth-user=               - User name for authentication to ENC
+#  --enc-port=                    - The External Node Classifier Port
+#  --enc-server=                  - The External Node Classifier hostname
+#  --enc-ssl                      - Whether to use SSL when connecting to the ENC
+#  --name=                        - Name of the group to be created
+#  --parameters=                  - Parameters to be added to the group
+#  --parent-groups=               - List of parent groups to add to the node
+
+
+name=$1
+if [ "$name" = "" ]
+then
+	echo "Usage:" $0 '<group name>'
+	exit 1
+fi
+
+export RUBYLIB=~/.puppet/modules/puppetlabs-dashboard/lib/
+
+puppet dashboard create_group \
+--enc-server=localhost \
+--enc-port=443 \
+--enc-ssl \
+--enc-auth-user=stefberg1@gmail.com \
+--enc-auth-passwd=secret_password \
+--name=$name
+
