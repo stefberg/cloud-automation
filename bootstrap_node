@@ -2,11 +2,13 @@
 
 server=`hostname -f`
 group=$1
+vm_type=$2
 if [ "$group" = "" ]
 then
-    echo usage: $0 '<group to add instance to>'
+    echo usage: $0 '<group to add instance to> <vm type>'
     exit 1
 fi
+[ "$vm_type" = "" ] && vm_type=t1.micro
 
 HOME=/home/ubuntu
 export HOME
@@ -16,7 +18,7 @@ export USER
 puppet node_aws bootstrap \
 --image ami-c1aaabb5 \
 --keyname 'puppet_provisioner' \
---type 't1.micro' \
+--type $vm_type \
 --region eu-west-1 \
 --security-group quick-start-1 \
 --login ubuntu \

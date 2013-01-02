@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
 import cgi
-import subprocess
+import socket
+import sys
 
 form = cgi.FieldStorage()
 
-print "Content-Type: text/plain"
+print "Content-Type: text/html"
 print ""
 if not form.has_key("pass") or form["pass"].value != "shaberg":
     print "Wrong password!"
@@ -14,17 +15,10 @@ if not form.has_key("group"):
     print "must set a group name"
     exit()
 
-print "Starting an instance with size", form["vm_size"].value, "adding it to puppet group", form["group"].value
-out_file = open("/var/www/logs/provision.txt", "w")
-subprocess.call(["/home/ubuntu/bootstrap_node", form["group"].value], stdout=out_file)
-out_file.close()
-in_file = open("/var/www/logs/provision.txt", "r")
-print in_file.read()
-in_file.close()
-
-import socket
-import sys
-
+print "<html>"
+print "<body>"
+print "Starting an instance with size", form["vm_size"].value, "adding it to puppet group", form["group"].value, "<br/>"
+print '<a href="/logs/provision.txt">log here</a>', '<br/>'
 HOST, PORT = "localhost", 9080
 data = form["group"].value + " " + form["vm_size"].value
 
@@ -41,5 +35,4 @@ try:
 finally:
     sock.close()
 
-print "Sent:     {}".format(data)
-print "Received: {}".format(received)
+print "bootstrap command", data, "sent to the bootstratp server", "<br/>"

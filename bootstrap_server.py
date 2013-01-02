@@ -18,7 +18,7 @@ class BootstrapHandler(SocketServer.BaseRequestHandler):
         print self.data
         out_file = open("/var/www/logs/provision.txt", "w")
         params = self.data.split()
-        subprocess.call(["./bootstrap_node_test", params[0], params[1]], stdout=out_file)
+        subprocess.call(["./bootstrap_node", params[0], params[1]], stdout=out_file)
         out_file.close()
         in_file = open("/var/www/logs/provision.txt", "r")
         in_data = in_file.read()

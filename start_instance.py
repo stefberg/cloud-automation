@@ -11,6 +11,13 @@ import boto.manage.cmdshell
 import time
 import sys
 import getpass
+import os
+
+files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "id_rsa", "provision.html", "provision.py", "bootstrap_server.py"]
+for f in files:
+    if not os.path.isfile(f):
+        print "you need to have", f, "in this directory"
+        exit(1)
 
 ssh_pass = getpass.getpass('ssh key password: ')
 puppet_console_email = raw_input('puppet console email: ')
@@ -72,7 +79,6 @@ def run_cmd(cmd):
 
 run_cmd('ls -la')
 
-files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "id_rsa", "provision.html", "provision.py"]
 for f in files:
     print "uploading ", f
     res = ssh_client.put_file(f, f)
@@ -100,6 +106,9 @@ print "install apache"
 run_cmd('sudo apt-get -y install apache2')
 print "running pe_post_patch.sh"
 run_cmd('sudo sh ./pe_post_patch.sh')
+
+print "starting bootstrap server"
+run_cmd('./bootstrap_server.py > bootstrap.log &')
 
 run_cmd('ls -la')
 

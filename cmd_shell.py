@@ -19,10 +19,10 @@ class FakeInstance(object):
 
 
 ssh_pass = getpass.getpass('ssh key password: ')
-puppet_console_email = raw_input('puppet console email: ')
-puppet_console_pass = getpass.getpass('puppet console password: ')
-aws_key = raw_input('aws_access_key_id: ')
-aws_secret = raw_input('aws_secret_access_key: ')
+#puppet_console_email = raw_input('puppet console email: ')
+#puppet_console_pass = getpass.getpass('puppet console password: ')
+#aws_key = raw_input('aws_access_key_id: ')
+#aws_secret = raw_input('aws_secret_access_key: ')
 
 instance = FakeInstance(instance_id, dns_name)
 
@@ -38,6 +38,10 @@ def run_cmd(cmd):
         print "ERROR:", result[2]
 
 run_cmd('ls -la')
+
+print "starting bootstrap server"
+run_cmd('./bootstrap_server.py > bootstrap.log &')
+exit()
 
 print "running gen_answers.sh"
 run_cmd('sh ./gen_answers.sh ' + puppet_console_email + " " + puppet_console_pass + " > answers.txt")
