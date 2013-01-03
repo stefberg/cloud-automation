@@ -1,0 +1,23 @@
+#!/bin/sh
+
+export RUBYLIB=~/.puppet/modules/puppetlabs-dashboard/lib/
+
+puppet dashboard create_class \
+--enc-server=localhost \
+--enc-port=443 \
+--enc-ssl \
+--enc-auth-user=stefberg1@gmail.com \
+--enc-auth-passwd=secret_password \
+--name=jboss_node
+
+puppet dashboard create_group \
+--enc-server=localhost \
+--enc-port=443 \
+--enc-ssl \
+--enc-auth-user=stefberg1@gmail.com \
+--enc-auth-passwd=secret_password \
+--classes=jboss::jboss_node \
+--parameters="jboss_version=7.1.1.Final" \
+--name=jboss_71
+
+

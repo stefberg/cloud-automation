@@ -13,7 +13,7 @@ import sys
 import getpass
 import os
 
-files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "id_rsa", "provision.html", "provision.py", "bootstrap_server.py"]
+files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "provision.html", "provision.py", "bootstrap_server.py", "create_group", "create_ya_classes"]
 for f in files:
     if not os.path.isfile(f):
         print "you need to have", f, "in this directory"
@@ -89,8 +89,9 @@ print "uploading id_rsa"
 res = ssh_client.put_file("id_rsa", ".ssh/id_rsa")
 if res:
     print res
+run_cmd('chmod go-rw .ssh/id_rsa')
 
-run_cmd('chmod +x bootstrap_node')
+run_cmd('chmod +x bootstrap_node create_group')
 print "untar puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar"
 run_cmd('tar xf puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar')
 print "running gen_answers.sh"
@@ -104,6 +105,16 @@ f.close()
 ssh_client.put_file("fog", ".fog")
 print "install apache"
 run_cmd('sudo apt-get -y install apache2')
+
+print "install git"
+run_cmd('sudo apt-get -y install git')
+print "clone learning-puppet"
+run_cmd('git clone https://github.com/oscarrenalias/learning-puppet.git')
+print "linking learning-puppet modules to puppet master"
+run_cmd('sudo ln -s $HOME/learning-puppet/modules/* /etc/puppetlabs/puppet/modules/')
+print "getting puppetlabs-dashboard"
+run_cmd('mkdir -p .puppet/modules; cd .puppet/modules; git clone https://github.com/puppetlabs/puppetlabs-dashboard.git')
+
 print "running pe_post_patch.sh"
 run_cmd('sudo sh ./pe_post_patch.sh')
 

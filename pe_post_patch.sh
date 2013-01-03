@@ -32,3 +32,11 @@ chmod +x /usr/lib/cgi-bin/provision.py
 mkdir /var/www/logs
 chmod go+w /var/www/logs
 chmod +x bootstrap_server.py
+
+file=.puppet/modules/puppetlabs-dashboard/lib/puppet/dashboard/classifier.rb 
+if [ ! -f $file.orig ]
+then
+  cp $file $file.orig
+fi
+
+sed 's/\\w/[\\w\\.]/g' <$file.orig > $file
