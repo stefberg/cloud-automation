@@ -22,7 +22,7 @@ puppet node_aws bootstrap \
 --region eu-west-1 \
 --security-group quick-start-1 \
 --login ubuntu \
---keyfile /home/ubuntu/id_rsa \
+--keyfile /home/ubuntu/.ssh/id_rsa \
 --certname puppet \
 --server $server \
 --node-group=$group \

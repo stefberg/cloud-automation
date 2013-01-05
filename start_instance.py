@@ -121,7 +121,5 @@ run_cmd('sudo sh ./pe_post_patch.sh')
 print "starting bootstrap server"
 run_cmd('./bootstrap_server.py > bootstrap.log &')
 
-run_cmd('ls -la')
-
 ec2.close()
 print "PE console https://"+instance.public_dns_name

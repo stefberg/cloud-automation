@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export RUBYLIB=~/.puppet/modules/puppetlabs-dashboard/lib/
+export RUBYLIB=$HOME/.puppet/modules/puppetlabs-dashboard/lib/
 
 puppet dashboard create_class \
 --enc-server=localhost \

@@ -40,3 +40,6 @@ then
 fi
 
 sed 's/\\w/[\\w\\.]/g' <$file.orig > $file
+
+chmod +x create_ya_classes
+./create_ya_classes
