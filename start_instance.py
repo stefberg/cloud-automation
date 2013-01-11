@@ -12,6 +12,14 @@ import time
 import sys
 import getpass
 import os
+import datetime
+
+def run_cmd(cmd):
+    result = ssh_client.run(cmd)
+    if result[1]:
+        print result[1]
+    if result[2]:
+        print "ERROR:", result[2]
 
 files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "provision.html", "provision.py", "bootstrap_server.py", "create_group", "create_ya_classes"]
 for f in files:
@@ -46,15 +54,19 @@ print ""
 
 print instance._state.name, " ", instance.id, " ", instance.public_dns_name
 
-wait_time = 60
+wait_time = 5
+instance.add_tag("Name", "PuppetMaster-" + str(datetime.date.today()))
+
+wait_time = 30
 print "wait", wait_time, "before connecting with ssh..."
 time.sleep(wait_time)
+
 print 'connecting with ssh...'
 ssh_client = boto.manage.cmdshell.sshclient_from_instance(instance, '/home/saberg/.ssh/id_rsa',
                                                           host_key_file='~/.ssh/known_hosts',
                                                           user_name='ubuntu', ssh_pwd=ssh_pass)
 
-print ssh_client.run('arch')
+print run_cmd('arch')
 
 class FakeInstance(object):
 
@@ -62,22 +74,12 @@ class FakeInstance(object):
         self.dns_name = dns_name
         self.id = instance_id
 
-
-
 fake_instance = FakeInstance(instance.id, instance.public_dns_name)
 
 ssh_client = boto.manage.cmdshell.sshclient_from_instance(fake_instance, '/home/saberg/.ssh/id_rsa',
                                                           host_key_file='~/.ssh/known_hosts',
                                                           user_name='ubuntu', ssh_pwd=ssh_pass)
 
-def run_cmd(cmd):
-    result = ssh_client.run(cmd)
-    if result[1]:
-        print result[1]
-    if result[2]:
-        print "ERROR:", result[2]
-
-run_cmd('ls -la')
 
 for f in files:
     print "uploading ", f
