@@ -21,7 +21,7 @@ def run_cmd(cmd):
     if result[2]:
         print "ERROR:", result[2]
 
-files = ['bootstrap_node', 'puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "provision.html", "provision.py", "bootstrap_server.py", "create_group", "create_ya_classes"]
+files = ['bootstrap_node', 'puppet-enterprise-2.7.0-ubuntu-12.04-amd64.tar', 'gen_answers.sh', 'pe_post_patch.sh', "provision.html", "provision.py", "bootstrap_server.py", "create_group", "create_ya_classes", "puppet_provisioner"]
 for f in files:
     if not os.path.isfile(f):
         print "you need to have", f, "in this directory"
@@ -87,19 +87,15 @@ for f in files:
     if res:
         print res
 
-print "uploading id_rsa"
-res = ssh_client.put_file("id_rsa", ".ssh/id_rsa")
-if res:
-    print res
-run_cmd('chmod go-rw .ssh/id_rsa')
+run_cmd('mv puppet_provisioner .ssh/id_rsa; chmod go-rw .ssh/id_rsa')
 
 run_cmd('chmod +x bootstrap_node create_group')
-print "untar puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar"
-run_cmd('tar xf puppet-enterprise-2.6.0-ubuntu-12.04-amd64.tar')
+print "untar puppet-enterprise-2.7.0-ubuntu-12.04-amd64.tar"
+run_cmd('tar xf puppet-enterprise-2.7.0-ubuntu-12.04-amd64.tar')
 print "running gen_answers.sh"
 run_cmd('sh ./gen_answers.sh ' + puppet_console_email + " " + puppet_console_pass + ' > answers.txt')
 print "running puppet installation"
-run_cmd('cd puppet-enterprise-2.6.0-ubuntu-12.04-amd64; sudo ./puppet-enterprise-installer -a ../answers.txt')
+run_cmd('cd puppet-enterprise-2.7.0-ubuntu-12.04-amd64; sudo ./puppet-enterprise-installer -a ../answers.txt')
 print "creating .fog file"
 f = open("fog", "w")
 f.write(":default:\n  :aws_access_key_id: " + aws_key + "\n  :aws_secret_access_key: " + aws_secret + "\n")
