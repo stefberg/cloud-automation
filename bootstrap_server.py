@@ -2,6 +2,12 @@
 
 import SocketServer
 import subprocess
+import os
+
+if os.path.exists('/var/www/html/logs'):
+    log_file="/var/www/html/logs/provision.txt"
+else:
+    log_file="/var/www/logs/provision.txt"
 
 class BootstrapHandler(SocketServer.BaseRequestHandler):
     """
@@ -16,11 +22,11 @@ class BootstrapHandler(SocketServer.BaseRequestHandler):
         # self.request is the TCP socket connected to the client
         self.data = self.request.recv(1024).strip()
         print self.data
-        out_file = open("/var/www/logs/provision.txt", "w")
+        out_file = open(log_file, "w")
         params = self.data.split()
         subprocess.call(["./bootstrap_node", params[0], params[1]], stdout=out_file)
         out_file.close()
-        in_file = open("/var/www/logs/provision.txt", "r")
+        in_file = open(log_file, "r")
         in_data = in_file.read()
         in_file.close()
         # just send back the same data, but upper-cased

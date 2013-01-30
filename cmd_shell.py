@@ -19,6 +19,7 @@ class FakeInstance(object):
 
 
 ssh_pass = getpass.getpass('ssh key password: ')
+
 #puppet_console_email = raw_input('puppet console email: ')
 #puppet_console_pass = getpass.getpass('puppet console password: ')
 #aws_key = raw_input('aws_access_key_id: ')
@@ -28,7 +29,10 @@ instance = FakeInstance(instance_id, dns_name)
 
 ssh_client = boto.manage.cmdshell.sshclient_from_instance(instance, '/home/saberg/.ssh/id_rsa',
                                                           host_key_file='~/.ssh/known_hosts',
-                                                          user_name='ubuntu', ssh_pwd=ssh_pass)
+                                                          user_name='root', ssh_pwd=ssh_pass)
+
+ssh_client.put_file('puppet-enterprise-2.7.0-el-6-x86_64.tar', 'puppet-enterprise-2.7.0-el-6-x86_64.tar')
+exit(0)
 
 def run_cmd(cmd):
     result = ssh_client.run(cmd)
